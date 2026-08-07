@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Merge tool backups
+*.orig
+
+# Private working files
+_private/
