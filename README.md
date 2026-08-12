@@ -24,9 +24,7 @@ This repository documents working implementations rather than theoretical design
 
 ## Documentation
 
-All repository documentation is maintained in the `docs` directory.
-
-The documentation is organized as a collection of focused guides. Each document covers a specific task or topic to keep the procedures concise, maintainable, and easy to validate.
+All repository documentation is maintained in the `docs` directory. The documentation is organized as a collection of focused installation guides, reference material, and management documentation. Each document covers a specific task or topic to keep the procedures concise, maintainable, and easy to validate.
 
 ## Repository Structure
 
