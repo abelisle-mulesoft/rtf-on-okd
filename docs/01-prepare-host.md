@@ -99,7 +99,7 @@ The following directories are used:
 
 | Directory | Purpose |
 |-----------|---------|
-| `/vm-storage` | Stores the OKD virtual machine disk and installation media. |
+| `/data` | Stores the OKD virtual machine disk and installation media. |
 | `/archives` | Stores backups of the validated OKD and Runtime Fabric virtual machine disks. |
 
 These directories may reside on dedicated storage devices, separate partitions, or the operating system volume, depending on the available hardware.
@@ -110,7 +110,10 @@ Create the storage directories if they do not already exist.
 
 ```bash
 sudo mkdir -p \
-    /vm-storage \
+    /data \
+    /data/vm \
+    /data/registry \
+    /data/images \
     /archives \
     /archives/installation-assets \
     /archives/okd \
@@ -122,7 +125,7 @@ Ensure the directories are owned by the administrative user so they can be used 
 
 ```bash
 sudo chown -R "$USER:$USER" \
-    /vm-storage \
+    /data \
     /archives
 ```
 
@@ -134,7 +137,10 @@ Verify that both directories exist.
 
 ```bash
 ls -ld \
-    /vm-storage \
+    /data \
+    /data/vm \
+    /data/registry \
+    /data/images \
     /archives \
     /archives/installation-assets \
     /archives/okd \
@@ -145,7 +151,7 @@ ls -ld \
 If the directories are hosted on separate filesystems, verify that they are mounted.
 
 ```bash
-findmnt /vm-storage
+findmnt /data
 findmnt /archives
 ```
 
@@ -153,13 +159,13 @@ Verify that sufficient storage is available.
 
 ```bash
 df -h \
-    /vm-storage \
+    /data \
     /archives
 ```
 
 Confirm that:
 
-- `/vm-storage` exists.
+- `/data` exists.
 - `/archives` exists.
 - If separate filesystems are used, they are mounted.
 - Sufficient free space is available for the virtual machine disks and backups.
@@ -213,7 +219,7 @@ mkdir -p \
   scripts
 ```
 
-The workspace is used to organize installation assets, generated files, and helper scripts. It is independent of the virtual machine storage located under `/vm-storage`.
+The workspace is used to organize installation assets, generated files, and helper scripts. It is independent of the virtual machine storage located under `/data/vm`.
 
 ### 4.5 Create a Network Bridge
 
@@ -262,12 +268,14 @@ sudo nmcli connection add \
     master br0
 ```
 
-Activate the bridge.
+Activate the bridge. Because changing the active network connection may interrupt the current SSH session, run both NetworkManager operations in a backgrounded shell so that activation of the bridge can continue if the connection is lost.
 
 ```bash
-sudo nmcli connection down enp4s0
-sudo nmcli connection up br0
+sudo sh -c 'nmcli connection down enp4s0; nmcli connection up br0' &
 ```
+
+> [!NOTE]
+> The SSH connection may be interrupted while the physical interface is moved to the bridge. If disconnected, wait for br0 to obtain its IP address and reconnect to the host before continuing with the verification steps.
 
 **Verification**
 
@@ -371,8 +379,6 @@ Perform a final verification to confirm that the host is ready to create the OKD
 **Verification**
 
 ```bash
-findmnt /vm-storage
-
 systemctl is-active libvirtd
 systemctl is-active cockpit.socket
 
@@ -392,7 +398,6 @@ coreos-installer --version
 
 Confirm that:
 
-- `/vm-storage` is mounted.
 - The `libvirtd` and `cockpit.socket` services are active.
 - The `br0` bridge interface is active and has an IP address.
 - `jq`, `openshift-install`, `oc`, `kubectl`, and `operator-sdk` are installed and available.
@@ -400,4 +405,3 @@ Confirm that:
 - `coreos-installer` is installed and available.
 
 If all verification steps complete successfully, the host is ready to install OKD.
-

@@ -106,48 +106,7 @@ Confirm that the command returns `True`.
 > [!NOTE]
 > On Orion, the virtual machine reaches the `running` state almost immediately, and the OKD Single Node OpenShift cluster typically becomes fully operational within approximately 5 to 6 minutes. Startup time may vary depending on the host system and workload. Always rely on the verification steps in this guide rather than elapsed time before proceeding.
 
-## 4. Install `rtfctl`
-
-> [!NOTE]
-> This guide assumes the KUBECONFIG environment variable configured in Section 3.2 remains set for the current terminal session.
-
-**Procedure**
-
-Change to the downloads directory.
-
-```bash
-cd ~/Work/rtf-on-okd/downloads
-```
-
-Download the `rtfctl` command-line tool.
-
-```bash
-curl -L https://anypoint.mulesoft.com/runtimefabric/api/download/rtfctl/latest -o rtfctl
-```
-
-Install the `rtfctl` command-line tool.
-
-```bash
-sudo install -m 755 rtfctl /usr/local/bin/
-```
-
-**Verification**
-
-Verify that `rtfctl` is installed.
-
-```bash
-rtfctl version
-```
-
-Example output:
-
-```text
-COMPONENT    VERSION
-rtfctl       1.0.150
-kubernetes   1.35.5
-```
-
-## 5. Create a Runtime Fabric in Anypoint Platform
+## 4. Create a Runtime Fabric in Anypoint Platform
 
 Create the Runtime Fabric resource in Anypoint Platform and select the OpenShift deployment option.
 
@@ -183,9 +142,9 @@ The Runtime Fabric details page should appear similar to the following example.
 > [!NOTE]
 > The installation instructions, registry credentials, and activation data remain available on the Runtime Fabric details page. The next section uses the values displayed on this page to install Runtime Fabric on OKD.
 
-## 6. Install Anypoint Runtime Fabric on OKD SNO
+## 5. Install Anypoint Runtime Fabric on OKD SNO
 
-### 6.1 Create the Runtime Fabric Namespace
+### 5.1 Create the Runtime Fabric Namespace
 
 On the RHEL host, create a namespace for installing Runtime Fabric.
 
@@ -193,7 +152,7 @@ On the RHEL host, create a namespace for installing Runtime Fabric.
 oc create ns rtf
 ```
 
-### 6.2 Create the Registry Pull Secrets
+### 5.2 Create the Registry Pull Secrets
 
 Create the registry credentials required to pull the Runtime Fabric platform images and the certified Runtime Fabric Operator bundle.
 
@@ -264,7 +223,7 @@ oc get serviceaccount default \
 
 Confirm that the output includes `redhat-connect-pull-secret`.
 
-### 6.3 Install the Runtime Fabric Operator
+### 5.3 Install the Runtime Fabric Operator
 
 Install the certified Runtime Fabric Operator bundle using Operator SDK.
 
@@ -310,7 +269,7 @@ oc get pods \
 
 Confirm that the Runtime Fabric Operator pod reports `Running` and all its containers are ready.
 
-### 6.4 Gather the Installation Information
+### 5.4 Gather the Installation Information
 
 Gather the following information and collect it into a temporary scratchpad or plain text file.
 
@@ -341,7 +300,7 @@ Copy the displayed value. It will be used when creating the Runtime Fabric insta
 > [!IMPORTANT]
 > The Runtime Fabric activation data, Mule license, and registry credentials are sensitive. Do not store them in screenshots, shell scripts, or source-control repositories.
 
-### 6.5 Create the Runtime Fabric Instance
+### 5.5 Create the Runtime Fabric Instance
 
 Create a Runtime Fabric instance using the Runtime Fabric Operator.
 
@@ -368,9 +327,9 @@ Select **Create**.
 > [!IMPORTANT]
 > After creating the Runtime Fabric instance, close the temporary scratchpad without saving it, or delete the temporary plain text file. It contains sensitive information, including the kubeadmin password, Runtime Fabric activation data, and the Base64-encoded Mule license.
 
-## 7. Validate the Runtime Fabric Installation
+## 6. Validate the Runtime Fabric Installation
 
-### 7.1 Verify Runtime Fabric Registration
+### 6.1 Verify Runtime Fabric Registration
 
 Verify that the Runtime Fabric has successfully registered with Anypoint Platform.
 
@@ -393,9 +352,9 @@ On the **Runtime Fabrics** page, confirm that the Runtime Fabric appears in the 
 
 The Runtime Fabrics page should appear similar to the following example.
 
-<img src="../assets/images/07-01-runtime-fabric-active.png" style="width:6.5in"/>
+<img src="../assets/images/06-01-runtime-fabric-active.png" style="width:6.5in"/>
 
-### 7.2 Verify Runtime Fabric Health
+### 6.2 Verify Runtime Fabric Health
 
 Verify that the Runtime Fabric is operational.
 
@@ -415,9 +374,9 @@ On the **Health Details** tab, confirm that:
 
 The Health Details tab should appear similar to the following example.
 
-<img src="../assets/images/07-02-runtime-fabric-health-details.png" style="width:6.5in"/>
+<img src="../assets/images/06-02-runtime-fabric-health-details.png" style="width:6.5in"/>
 
-### 7.3 Deploy a Mule Application
+### 6.3 Deploy a Mule Application
 
 Deploy a Mule application to confirm that Runtime Fabric can create and run an application workload.
 
@@ -431,7 +390,7 @@ Associate the Runtime Fabric with the relevant business group and the environmen
 
 The **Associated Environments** tab should appear similar to the following example after saving your changes.
 
-<img src="../assets/images/07-03-runtime-fabric-associated-environment.png" style="width:6.5in"/>
+<img src="../assets/images/06-03-runtime-fabric-associated-environment.png" style="width:6.5in"/>
 
 > [!NOTE]
 > Runtime Fabric must be associated with at least one Anypoint environment before applications or API gateways can be deployed to it.
@@ -446,7 +405,7 @@ After deploying the application, return to **Applications** in Runtime Manager.
 
 Confirm that the application appears in the list and reports **Running**.
 
-### 7.4 Verify the Mule Application
+### 6.4 Verify the Mule Application
 
 Verify that the deployed Mule application responds successfully.
 
@@ -482,11 +441,11 @@ curl http://localhost:8081/<endpoint>
 
 Confirm that the request completes successfully and returns the expected response from the deployed Mule application.
 
-## 8. Back Up the Validated Runtime Fabric Installation
+## 7. Back Up the Validated Runtime Fabric Installation
 
 Remove the validation application and create a backup of the clean, validated Runtime Fabric environment.
 
-### 8.1 Remove the Validation Application
+### 7.1 Remove the Validation Application
 
 Delete the validation application from Runtime Manager.
 
@@ -509,7 +468,7 @@ oc get services --all-namespaces \
 
 Confirm that the command returns no output.
 
-### 8.2 Shut Down the OKD Virtual Machine
+### 7.2 Shut Down the OKD Virtual Machine
 
 Shut down the OKD virtual machine.
 
@@ -535,7 +494,7 @@ Example output:
 
 Press `Ctrl+C` to stop monitoring.
 
-### 8.3 Back Up the Clean Runtime Fabric Baseline
+### 7.3 Back Up the Clean Runtime Fabric Baseline
 
 Create a backup of the clean, validated Runtime Fabric installation.
 
@@ -551,7 +510,7 @@ sudo virsh dumpxml okd-sno \
 Back up the virtual machine disk image.
 
 ```bash
-sudo cp /vm-storage/okd-sno.qcow2 \
+sudo cp /data/vm/okd-sno.qcow2 \
     /archives/rtf/okd-sno-rtf-clean.qcow2
 ```
 
@@ -579,7 +538,7 @@ du -h --apparent-size /archives/rtf/okd-sno-rtf-clean.qcow2
 
 Together, these files preserve the validated Runtime Fabric environment, including both the libvirt virtual machine definition and the virtual machine disk image. This backup serves as the validated baseline of a clean OKD Single Node OpenShift cluster with Anypoint Runtime Fabric installed, registered, licensed, healthy, and validated through a successful Mule application deployment.
 
-### 8.4 Archive the Installation Assets
+### 7.4 Archive the Installation Assets
 
 Create an archive containing the OKD installation assets generated in the cluster workspace.
 

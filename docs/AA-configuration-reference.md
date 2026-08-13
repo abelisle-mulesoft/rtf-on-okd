@@ -16,7 +16,7 @@ The validation was carried out on **Orion**, the workstation which is available 
 | Operating system | Red Hat Enterprise Linux 9.8 |
 | Virtualization | KVM / libvirt |
 | Primary storage | 1 TB NVMe SSD |
-| Virtual machine storage | 1 TB SATA SSD mounted at `/vm-storage` |
+| Virtual machine storage | 1 TB SATA SSD mounted at `/data` |
 | Archive storage | 4 TB disk mounted at `/archives` |
 | Network | NetworkManager bridge (`br0`) |
 
@@ -64,7 +64,7 @@ The virtual machine is created in `02-install-okd.md` with the following princip
 --cpu host-passthrough
 --machine q35
 --boot uefi
---disk path=/vm-storage/okd-sno.qcow2,size=500,bus=virtio,format=qcow2
+--disk path=/data/vm/okd-sno.qcow2,size=500,bus=virtio,format=qcow2
 --network bridge=br0,model=virtio
 ```
 
@@ -100,7 +100,6 @@ The procedures in this repository were validated using the following software ve
 | Runtime Fabric | 3.0.277 |
 | Runtime Fabric Operator | 3.0.277 |
 | Runtime Fabric Operator Bundle | 3.0.277-1785441385 |
-| `rtfctl` | 1.0.150 |
 | Operator SDK | 1.40.0 |
 
 > [!IMPORTANT]

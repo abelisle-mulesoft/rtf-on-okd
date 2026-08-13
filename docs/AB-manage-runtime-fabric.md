@@ -15,12 +15,12 @@ Restore a previously created virtual machine disk backup.
 The procedures in this section assume that:
 
 - The `okd-sno` libvirt virtual machine already exists.
-- The virtual machine uses `/vm-storage/okd-sno.qcow2` as its disk.
+- The virtual machine uses `/data/vm/okd-sno.qcow2` as its disk.
 - The verified OKD backup is stored at `/archives/okd/okd-sno-verified.qcow2`.
 - The clean Runtime Fabric backup is stored at `/archives/rtf/okd-sno-rtf-clean.qcow2`.
 
 > [!WARNING]
-> Restoring a backup replaces the current `/vm-storage/okd-sno.qcow2` virtual machine disk. Preserve the current disk before continuing if it may be needed later.
+> Restoring a backup replaces the current `/data/vm/okd-sno.qcow2` virtual machine disk. Preserve the current disk before continuing if it may be needed later.
 
 ### Restore the Verified OKD Baseline
 
@@ -45,7 +45,7 @@ Continue when the virtual machine reports `shut off`, and then press `Ctrl+C`.
 Preserve the current virtual machine disk in `/archives/pre-restore` before restoring a backup. This temporary safety-net copy allows the current state to be recovered if the restored baseline is not the desired one.
 
 ```bash
-sudo mv /vm-storage/okd-sno.qcow2 \
+sudo mv /data/vm/okd-sno.qcow2 \
     "/archives/pre-restore/okd-sno-$(date +%Y%m%d-%H%M%S).qcow2"
 ```
 
@@ -53,7 +53,7 @@ Restore the verified OKD backup.
 
 ```bash
 sudo cp /archives/okd/okd-sno-verified.qcow2 \
-    /vm-storage/okd-sno.qcow2
+    /data/vm/okd-sno.qcow2
 ```
 
 Start the virtual machine.
@@ -114,7 +114,7 @@ Continue when the virtual machine reports `shut off`, and then press `Ctrl+C`.
 Preserve the current virtual machine disk in `/archives/pre-restore` before restoring a backup. This temporary safety-net copy allows the current state to be recovered if the restored baseline is not the desired one.
 
 ```bash
-sudo mv /vm-storage/okd-sno.qcow2 \
+sudo mv /data/vm/okd-sno.qcow2 \
     "/archives/pre-restore/okd-sno-$(date +%Y%m%d-%H%M%S).qcow2"
 ```
 
@@ -122,7 +122,7 @@ Restore the clean Runtime Fabric backup.
 
 ```bash
 sudo cp /archives/rtf/okd-sno-rtf-clean.qcow2 \
-    /vm-storage/okd-sno.qcow2
+    /data/vm/okd-sno.qcow2
 ```
 
 Start the virtual machine.
@@ -166,3 +166,9 @@ In Runtime Manager, confirm that:
 - The health summary reports **All systems operational**.
 - All Runtime Fabric health checks report **Healthy**.
 - No validation Mule application is deployed.
+
+<!-- ## 3. Update the Mule License -->
+<!-- ### 3.1 Install Helm -->
+<!-- ### 3.2 Update the Mule License -->
+
+<!-- ## Upgrade Runtime Fabric -->

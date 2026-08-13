@@ -48,7 +48,7 @@ SSH_KEY=$(cat ~/.ssh/id_ed25519.pub)
 
 cat > install-config.yaml <<EOF
 apiVersion: v1
-baseDomain: 172.20.200.10.nip.io
+baseDomain: 172.20.200.240.nip.io
 
 metadata:
   name: okd
@@ -95,9 +95,9 @@ cp install-config.yaml install-config.yaml.backup
 > [!NOTE]
 > The `install-config.yaml` file above uses the following values throughout this guide:
 >
-> 1. The node IP address is `172.20.200.10`.
+> 1. The node IP address is `172.20.200.240`.
 > 2. The cluster name is `okd`.
-> 3. The base domain is `nip.io`. The API endpoint will be `api.okd.172-20-200-10.nip.io`.
+> 3. The base domain is `nip.io`. The API endpoint will be `api.okd.172-20-200-240.nip.io`.
 > 4. The placeholder pull secret is sufficient for this installation because OKD does not require a Red Hat pull secret.
 
 ### 3.3 Generate the Ignition Configuration
@@ -119,7 +119,7 @@ This guide assumes the following reservation.
 | Setting | Value |
 |---------|-------|
 | Hostname | okd-sno |
-| IP Address | 172.20.200.10 |
+| IP Address | 172.20.200.240 |
 | MAC Address | 52:54:00:8a:b3:1c |
 
 > [!NOTE]
@@ -139,7 +139,7 @@ Copy the downloaded SCOS live ISO to the virtual machine storage. The original d
 cd ~/Work/rtf-on-okd
 
 sudo cp "downloads/$(basename "$ISO_URL")" \
-    /vm-storage/okd-sno-install.iso
+    /data/vm/okd-sno-install.iso
 ```
 
 #### Embed the Ignition Configuration
@@ -149,7 +149,7 @@ Embed the bootstrap-in-place Ignition configuration into the installation ISO.
 ```bash
 sudo coreos-installer iso ignition embed \
     -i cluster/bootstrap-in-place-for-live-iso.ign \
-    /vm-storage/okd-sno-install.iso
+    /data/vm/okd-sno-install.iso
 ```
 
 **Verification**
@@ -158,7 +158,7 @@ Verify that the installation ISO contains the embedded Ignition configuration.
 
 ```bash
 sudo coreos-installer iso ignition show \
-    /vm-storage/okd-sno-install.iso |
+    /data/vm/okd-sno-install.iso |
     jq '{
         ignitionVersion: .ignition.version,
         files: (.storage.files | length),
@@ -190,8 +190,8 @@ sudo virt-install \
     --cpu host-passthrough \
     --machine q35 \
     --boot uefi \
-    --disk path=/vm-storage/okd-sno.qcow2,size=500,bus=virtio,format=qcow2 \
-    --cdrom /vm-storage/okd-sno-install.iso \
+    --disk path=/data/vm/okd-sno.qcow2,size=500,bus=virtio,format=qcow2 \
+    --cdrom /data/vm/okd-sno-install.iso \
     --network bridge=br0,model=virtio,mac=52:54:00:8a:b3:1c \
     --graphics none \
     --console pty,target_type=serial \
@@ -370,7 +370,7 @@ sudo virsh dumpxml okd-sno \
 Back up the OKD virtual machine disk image.
 
 ```bash
-sudo cp /vm-storage/okd-sno.qcow2 \
+sudo cp /data/vm/okd-sno.qcow2 \
     /archives/okd/okd-sno-verified.qcow2
 ```
 
