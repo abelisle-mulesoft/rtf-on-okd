@@ -34,13 +34,13 @@ Start the OKD virtual machine and verify that the cluster is healthy before inst
 
 Start the OKD virtual machine.
 
-**Procedure**
+##### Procedure
 
 ```bash
 sudo virsh start okd-sno
 ```
 
-**Verification**
+##### Verification
 
 Monitor the virtual machine until its state is `running`.
 
@@ -110,7 +110,7 @@ Confirm that the command returns `True`.
 
 Create the Runtime Fabric resource in Anypoint Platform and select the OpenShift deployment option.
 
-**Procedure**
+##### Procedure
 
 Sign in to [Anypoint Platform](https://anypoint.mulesoft.com).
 
@@ -126,7 +126,7 @@ Review the support responsibility disclaimer. To continue, select **Accept**.
 
 Anypoint Platform creates the Runtime Fabric and displays the installation instructions.
 
-**Verification**
+##### Verification
 
 Confirm that:
 
@@ -144,6 +144,9 @@ The Runtime Fabric details page should appear similar to the following example.
 
 ## 5. Install Anypoint Runtime Fabric on OKD SNO
 
+> [!NOTE]
+> If you are configuring Runtime Fabric to use a local container registry, do not continue with this section. Follow the installation procedure in `AC-configure-local-rtf-registry.md` instead.
+
 ### 5.1 Create the Runtime Fabric Namespace
 
 On the RHEL host, create a namespace for installing Runtime Fabric.
@@ -156,9 +159,9 @@ oc create ns rtf
 
 Create the registry credentials required to pull the Runtime Fabric platform images and the certified Runtime Fabric Operator bundle.
 
-**Procedure**
+##### Procedure
 
-#### Create the Runtime Fabric Registry Pull Secret
+###### Create the Runtime Fabric Registry Pull Secret
 
 On the Runtime Fabric details page in Anypoint Platform, locate and run the generated command for creating the Runtime Fabric registry pull secret. The command has the following form:
 
@@ -170,10 +173,7 @@ oc create secret docker-registry rtf-pull-secret \
     --docker-password='<runtime-fabric-registry-password>'
 ```
 
-> [!IMPORTANT]
-> The generated command contains credentials specific to the Runtime Fabric installation. Do not store the command or its credentials in screenshots, shell scripts, or source-control repositories.
-
-#### Create the Red Hat Registry Pull Secret
+###### Create the Red Hat Registry Pull Secret
 
 Create the pull secret used to retrieve the certified Runtime Fabric Operator bundle.
 
@@ -194,7 +194,7 @@ oc secrets link default \
     --namespace rtf
 ```
 
-**Verification**
+##### Verification
 
 Verify that both registry pull secrets exist.
 
@@ -230,7 +230,16 @@ Install the certified Runtime Fabric Operator bundle using Operator SDK.
 > [!NOTE]
 > MuleSoft’s OpenShift procedure installs the Runtime Fabric Operator from the Red Hat OperatorHub catalog. Because OKD does not include the Red Hat certified operator catalog, this guide installs the certified operator bundle through the Operator Lifecycle Manager using `operator-sdk`.
 
-**Procedure**
+##### Procedure
+
+Sign in to the Red Hat registry so that operator-sdk can retrieve the Runtime Fabric Operator bundle.
+
+```bash
+podman login \
+    registry.connect.redhat.com \
+    --username '<red-hat-username>' \
+    --password '<red-hat-password>'
+```
 
 Install the Runtime Fabric Operator bundle.
 
@@ -244,7 +253,13 @@ operator-sdk run bundle \
 
 The command creates the Operator Lifecycle Manager resources required to install the operator.
 
-**Verification**
+Sign out of the Red Hat registry after the operator installation completes.
+
+```bash
+podman logout registry.connect.redhat.com
+```
+
+##### Verification
 
 Verify that the Runtime Fabric Operator ClusterServiceVersion (CSV) reports `Succeeded`.
 
@@ -273,7 +288,14 @@ Confirm that the Runtime Fabric Operator pod reports `Running` and all its conta
 
 Gather the following information and collect it into a temporary scratchpad or plain text file.
 
-**Procedure**
+- Local registry URL and port
+- Local registry pull secret name
+- OKD web console URL
+- `kubeadmin` password
+- Runtime Fabric Activation Data
+- Base64-encoded Mule license
+
+##### Procedure
 
 On the RHEL host, retrieve the OKD web console URL.
 
@@ -304,7 +326,7 @@ Copy the displayed value. It will be used when creating the Runtime Fabric insta
 
 Create a Runtime Fabric instance using the Runtime Fabric Operator.
 
-**Procedure**
+##### Procedure
 
 Open the OKD web console URL in a browser and sign in as `kubeadmin`.
 
@@ -333,7 +355,7 @@ Select **Create**.
 
 Verify that the Runtime Fabric has successfully registered with Anypoint Platform.
 
-**Procedure**
+##### Procedure
 
 Sign in to [Anypoint Platform](https://anypoint.mulesoft.com).
 
@@ -341,7 +363,7 @@ On the Anypoint Platform home page, select **Runtime Manager** from the **Manage
 
 In Runtime Manager, select **Runtime Fabrics** in the navigation menu on the left.
 
-**Verification**
+##### Verification
 
 On the **Runtime Fabrics** page, confirm that the Runtime Fabric appears in the list, and:
 
@@ -358,11 +380,11 @@ The Runtime Fabrics page should appear similar to the following example.
 
 Verify that the Runtime Fabric is operational.
 
-**Procedure**
+##### Procedure
 
 In Runtime Manager, on the **Runtime Fabrics** page, select `orion-okd-rtf`.
 
-**Verification**
+##### Verification
 
 On the **Health Details** tab, confirm that:
 
@@ -409,7 +431,7 @@ Confirm that the application appears in the list and reports **Running**.
 
 Verify that the deployed Mule application responds successfully.
 
-**Procedure**
+##### Procedure
 
 In Runtime Manager, identify the name of the deployed validation application.
 
@@ -437,7 +459,7 @@ Leave the command running, open a second terminal, and call the application endp
 curl http://localhost:8081/<endpoint>
 ```
 
-**Verification**
+##### Verification
 
 Confirm that the request completes successfully and returns the expected response from the deployed Mule application.
 
@@ -449,7 +471,7 @@ Remove the validation application and create a backup of the clean, validated Ru
 
 Delete the validation application from Runtime Manager.
 
-**Procedure**
+##### Procedure
 
 In Runtime Manager, select **Applications**.
 
@@ -457,7 +479,7 @@ Select the validation application, and then delete it.
 
 Wait until Runtime Manager no longer lists the application.
 
-**Verification**
+##### Verification
 
 Verify that the application service no longer exists.
 
@@ -472,7 +494,7 @@ Confirm that the command returns no output.
 
 Shut down the OKD virtual machine.
 
-**Procedure**
+##### Procedure
 
 ```bash
 sudo virsh shutdown okd-sno
@@ -498,7 +520,7 @@ Press `Ctrl+C` to stop monitoring.
 
 Create a backup of the clean, validated Runtime Fabric installation.
 
-**Procedure**
+##### Procedure
 
 Back up the libvirt virtual machine definition.
 
@@ -517,7 +539,7 @@ sudo cp /data/vm/okd-sno.qcow2 \
 > [!NOTE]
 > This backup creates an independent copy of the virtual machine disk that can be restored at any time without relying on libvirt snapshot metadata.
 
-**Verification**
+##### Verification
 
 Verify that the backups exist.
 
@@ -542,7 +564,7 @@ Together, these files preserve the validated Runtime Fabric environment, includi
 
 Create an archive containing the OKD installation assets generated in the cluster workspace.
 
-**Procedure**
+##### Procedure
 
 Archive the installation assets.
 
@@ -554,7 +576,7 @@ tar -czf \
     cluster
 ```
 
-**Verification**
+##### Verification
 
 Verify that the archive was created.
 
