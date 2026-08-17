@@ -51,11 +51,18 @@ The current release documents the provisioning of an OKD Single Node (SNO) clust
 
 ## Roadmap
 
-### Release 1
+### Release 1 (`v1.0.0`)
 
 - Provision an OKD Single Node cluster on a Linux host using KVM/libvirt.
 - Install MuleSoft Runtime Fabric.
 - Validate the installation by deploying a Mule application.
+
+### Release 1.1 (`v1.1.0`)
+
+- Add support for using a local image registry with Runtime Fabric.
+- Add procedures for synchronizing Runtime Fabric and Mule runtime images to the local registry.
+- Add Runtime Fabric outbound connectivity testing and related management guidance.
+- Incorporate installation procedure improvements identified while validating the local registry configuration.
 
 ### Future Enhancements
 
