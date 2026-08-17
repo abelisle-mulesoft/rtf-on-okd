@@ -18,8 +18,9 @@ These documents should be completed in order.
 |----------|-------------|
 | `AA-configuration-reference.md` | Validated environment configuration and software versions. |
 | `AB-manage-runtime-fabric.md` | Runtime Fabric management procedures. |
+| `AC-configure-local-rtf-registry.md` | Configure a local image registry for Runtime Fabric. |
 
-These documents provide reference information and management procedures for the validated environment. They can be consulted independently after completing the installation.
+These documents provide reference information, configuration guidance, and management procedures for the validated environment. They can be consulted independently after completing the installation.
 
 ## Documentation Principles
 
