@@ -26,7 +26,7 @@ The procedures in this section assume that:
 
 Restore the verified OKD baseline that completed the initial certificate rotation and does not include Runtime Fabric.
 
-**Procedure**
+##### Procedure
 
 Shut down the OKD virtual machine.
 
@@ -62,7 +62,7 @@ Start the virtual machine.
 sudo virsh start okd-sno
 ```
 
-**Verification**
+##### Verification
 
 Configure the OpenShift client.
 
@@ -95,7 +95,7 @@ Confirm that:
 
 Restore the clean Runtime Fabric baseline that contains a validated Runtime Fabric installation with no Mule applications deployed.
 
-**Procedure**
+##### Procedure
 
 Shut down the OKD virtual machine.
 
@@ -131,7 +131,7 @@ Start the virtual machine.
 sudo virsh start okd-sno
 ```
 
-**Verification**
+##### Verification
 
 Configure the OpenShift client.
 
@@ -167,8 +167,76 @@ In Runtime Manager, confirm that:
 - All Runtime Fabric health checks report **Healthy**.
 - No validation Mule application is deployed.
 
-<!-- ## 3. Update the Mule License -->
-<!-- ### 3.1 Install Helm -->
-<!-- ### 3.2 Update the Mule License -->
+## Test Runtime Fabric Outbound Connectivity
+
+Use `rtfctl` to verify that Runtime Fabric can reach the Anypoint control plane and external services required for operation.
+
+### Install `rtfctl`
+
+##### Procedure
+
+Change to the downloads directory.
+
+```bash
+cd ~/Work/rtf-on-okd/downloads
+```
+
+Download the `rtfctl` command-line tool.
+
+```bash
+curl -L https://anypoint.mulesoft.com/runtimefabric/api/download/rtfctl/latest -o rtfctl
+```
+
+Install the `rtfctl` command-line tool.
+
+```bash
+sudo install -m 755 rtfctl /usr/local/bin/
+```
+
+##### Verification
+
+Configure the OpenShift client to access the cluster.
+
+```bash
+export KUBECONFIG=~/Work/rtf-on-okd/cluster/auth/kubeconfig
+```
+
+Verify that `rtfctl` is installed.
+
+```bash
+rtfctl version
+```
+
+Example output:
+
+```text
+COMPONENT    VERSION
+rtfctl       1.0.150
+agent        3.0.277
+kubernetes   1.35.5
+```
+
+### Test Outbound Network Connectivity
+
+##### Procedure
+
+Test Runtime Fabric connectivity to the Anypoint control plane.
+
+```bash
+rtfctl test outbound-network
+```
+
+##### Verification
+
+Confirm that all required endpoints report successful connectivity and that the command completes with:
+
+```text
+Outbound network checks successful
+Kubernetes test outbound-network successful
+```
+
+<!-- ## Update the Mule License -->
+<!-- ### Install Helm -->
+<!-- ### Update the Mule License -->
 
 <!-- ## Upgrade Runtime Fabric -->
