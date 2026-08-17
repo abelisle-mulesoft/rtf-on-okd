@@ -75,14 +75,14 @@ Perform the following tasks to prepare the host for the OKD installation.
 
 Update the operating system to ensure the latest security updates and bug fixes are installed before configuring the host.
 
-**Procedure**
+##### Procedure
 
 ```bash
 sudo dnf update -y
 sudo reboot # If required
 ```
 
-**Verification**
+##### Verification
 
 Verify the installed Red Hat Enterprise Linux release and kernel version.
 
@@ -104,7 +104,7 @@ The following directories are used:
 
 These directories may reside on dedicated storage devices, separate partitions, or the operating system volume, depending on the available hardware.
 
-**Procedure**
+##### Procedure
 
 Create the storage directories if they do not already exist.
 
@@ -112,7 +112,6 @@ Create the storage directories if they do not already exist.
 sudo mkdir -p \
     /data \
     /data/vm \
-    /data/registry \
     /data/images \
     /archives \
     /archives/installation-assets \
@@ -131,7 +130,7 @@ sudo chown -R "$USER:$USER" \
 
 If these directories are hosted on separate filesystems, configure those filesystems to mount automatically during system startup.
 
-**Verification**
+##### Verification
 
 Verify that both directories exist.
 
@@ -139,7 +138,6 @@ Verify that both directories exist.
 ls -ld \
     /data \
     /data/vm \
-    /data/registry \
     /data/images \
     /archives \
     /archives/installation-assets \
@@ -174,7 +172,7 @@ Confirm that:
 
 Install the virtualization software required to host the OKD Single Node (SNO) virtual machine.
 
-**Procedure**
+##### Procedure
 
 ```bash
 sudo dnf install -y \
@@ -190,7 +188,7 @@ sudo systemctl enable --now libvirtd
 sudo systemctl enable --now cockpit.socket
 ```
 
-**Verification**
+##### Verification
 
 Verify that the virtualization tools are installed and the required services are enabled.
 
@@ -205,7 +203,7 @@ systemctl is-enabled cockpit.socket
 
 Create a workspace to store the files used throughout the OKD installation.
 
-**Procedure**
+##### Procedure
 
 ```bash
 mkdir -p ~/Work/rtf-on-okd
@@ -227,7 +225,7 @@ Create a NetworkManager bridge to allow the OKD virtual machine to connect direc
 
 The virtualization host must have a stable IP address. This guide uses DHCP with a DHCP reservation, but a static IP address is equally acceptable.
 
-**Procedure**
+##### Procedure
 
 Create the bridge interface.
 
@@ -277,7 +275,7 @@ sudo sh -c 'nmcli connection down enp4s0; nmcli connection up br0' &
 > [!NOTE]
 > The SSH connection may be interrupted while the physical interface is moved to the bridge. If disconnected, wait for br0 to obtain its IP address and reconnect to the host before continuing with the verification steps.
 
-**Verification**
+##### Verification
 
 Verify that the bridge is active and has obtained an IP address.
 
@@ -376,7 +374,7 @@ sudo dnf install -y coreos-installer
 
 Perform a final verification to confirm that the host is ready to create the OKD Single Node OpenShift virtual machine.
 
-**Verification**
+##### Verification
 
 ```bash
 systemctl is-active libvirtd

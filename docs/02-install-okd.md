@@ -23,7 +23,7 @@ Perform the following tasks to create the installation configuration.
 
 If you do not already have an SSH key pair, create one.
 
-**Procedure**
+##### Procedure
 
 ```bash
 ssh-keygen -t ed25519
@@ -152,7 +152,7 @@ sudo coreos-installer iso ignition embed \
     /data/vm/okd-sno-install.iso
 ```
 
-**Verification**
+##### Verification
 
 Verify that the installation ISO contains the embedded Ignition configuration.
 
@@ -288,7 +288,7 @@ Shutting down the cluster before the initial certificate rotation completes can 
 > [!IMPORTANT]
 > Do not shut down or back up the OKD virtual machine until at least 24 hours have elapsed and all verification steps in this section complete successfully.
 
-**Verification**
+##### Verification
 
 Verify that the node and cluster operators remain healthy.
 
@@ -358,7 +358,7 @@ Press `Ctrl+C` to stop monitoring.
 
 Create a backup of the verified OKD installation after the initial certificate rotation has completed.
 
-**Procedure**
+##### Procedure
 
 Back up the libvirt virtual machine definition.
 
@@ -377,7 +377,7 @@ sudo cp /data/vm/okd-sno.qcow2 \
 > [!NOTE]
 > This backup creates an independent copy of the virtual machine disk that can be restored at any time without relying on libvirt snapshot metadata.
 
-**Verification**
+##### Verification
 
 Verify that the backups exist.
 
