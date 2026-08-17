@@ -57,7 +57,7 @@ The current release documents the provisioning of an OKD Single Node (SNO) clust
 - Install MuleSoft Runtime Fabric.
 - Validate the installation by deploying a Mule application.
 
-### Release 1.1 (`v1.1.0`)
+### Release 2 (`v1.1.0`)
 
 - Add support for using a local image registry with Runtime Fabric.
 - Add procedures for synchronizing Runtime Fabric and Mule runtime images to the local registry.
@@ -66,7 +66,7 @@ The current release documents the provisioning of an OKD Single Node (SNO) clust
 
 ### Future Enhancements
 
-Documentation for additional deployment platforms, including Azure and AWS, will be provided as they are implemented and validated.
+Additional procedures and deployment scenarios will be documented as they are implemented and validated. Planned enhancements include Runtime Fabric lifecycle management and deployment on additional platforms, including Azure and AWS.
 
 ## About This Repository
 
