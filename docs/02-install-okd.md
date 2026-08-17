@@ -396,3 +396,7 @@ du -h --apparent-size /archives/okd/okd-sno-verified.qcow2
 ```
 
 Together, these files preserve the verified OKD Single Node OpenShift cluster, including both the libvirt virtual machine definition and the virtual machine disk image after the initial certificate rotation. This backup serves as the validated baseline for future Runtime Fabric installations and testing.
+
+---
+
+Copyright © 2026 Alan Belisle. Licensed under the [MIT License](../LICENSE).

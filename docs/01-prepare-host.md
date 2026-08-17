@@ -403,3 +403,7 @@ Confirm that:
 - `coreos-installer` is installed and available.
 
 If all verification steps complete successfully, the host is ready to install OKD.
+
+---
+
+Copyright © 2026 Alan Belisle. Licensed under the [MIT License](../LICENSE).

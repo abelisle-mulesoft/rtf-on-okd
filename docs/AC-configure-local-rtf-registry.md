@@ -282,7 +282,7 @@ Confirm that the latest tag is present and that `/data/registry` contains regist
 
 ### 3.1 Runtime Fabric Images
 
-Automatically synchronize the Runtime Fabric 3.0.277 images required for OpenShift from the MuleSoft-hosted registry to the local registry.
+Automatically synchronize the Runtime Fabric 3.0.102 images required for OpenShift from the MuleSoft-hosted registry to the local registry.
 
 ##### Procedure
 
@@ -306,12 +306,12 @@ test -n "$ANYPOINT_TOKEN" \
   && echo "Authorization token obtained successfully."
 ```
 
-Retrieve the OpenShift images required by Runtime Fabric 3.0.277.
+Retrieve the OpenShift images required by Runtime Fabric 3.0.102.
 
 ```bash
 RTF_IMAGE_LIST=$(
   curl -sS \
-    "https://anypoint.mulesoft.com/runtimefabric/api/agentmanifests/3.0.277" \
+    "https://anypoint.mulesoft.com/runtimefabric/api/agentmanifests/3.0.102" \
     -H "Authorization: bearer ${ANYPOINT_TOKEN}" \
   | jq -r '.dependencies[]
       | select(.provider == "openshift")
@@ -328,16 +328,17 @@ printf '%s\n' "$RTF_IMAGE_LIST"
 Example output:
 
 ```text
-rtf-core-actions-ubi:1.0.219
-dias-anypoint-monitoring-sidecar-ubi:2.2.36
+rtf-core-actions-ubi:1.0.200
+dias-anypoint-monitoring-sidecar-ubi:2.0.45
+rtf-cluster-ops-ubi:2.0.299
+rtf-daemon-ubi:2.0.284
+rtf-mule-clusterip-service-ubi:1.4.52
+rtf-app-init-ubi:1.0.245
+rtf-object-store-ubi:1.0.264
+rtf-ubi-base-nginx:0.3.48
+rtf-resource-fetcher-ubi:1.0.259
 rtf-cluster-ops-ubi:2.0.384
-rtf-daemon-ubi:2.0.400
-rtf-mule-clusterip-service-ubi:1.4.92
-rtf-app-init-ubi:1.0.274
-rtf-object-store-ubi:1.0.312
-rtf-ubi-base-nginx:0.3.57
-rtf-resource-fetcher-ubi:1.0.333
-rtf-agent-ubi:3.0.277
+rtf-agent-ubi:3.0.102
 ```
 
 Sign in to the MuleSoft Runtime Fabric registry.
@@ -843,3 +844,7 @@ After creating the Runtime Fabric instance, continue with **Section 6, Validate 
 
 > [!IMPORTANT]
 > After creating the Runtime Fabric instance, close the temporary scratchpad without saving it, or delete the temporary plain text file. It contains sensitive information, including the kubeadmin password, Runtime Fabric activation data, and the Base64-encoded Mule license.
+
+---
+
+Copyright © 2026 Alan Belisle. Licensed under the [MIT License](../LICENSE).

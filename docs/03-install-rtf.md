@@ -588,3 +588,7 @@ The archived installation assets complement the virtual machine backups by prese
 
 > [!IMPORTANT]
 > These files contain sensitive information. Protect them appropriately and do not commit them to source control.
+
+---
+
+Copyright © 2026 Alan Belisle. Licensed under the [MIT License](../LICENSE).

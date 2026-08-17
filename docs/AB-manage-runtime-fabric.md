@@ -240,3 +240,7 @@ Kubernetes test outbound-network successful
 <!-- ### Update the Mule License -->
 
 <!-- ## Upgrade Runtime Fabric -->
+
+---
+
+Copyright © 2026 Alan Belisle. Licensed under the [MIT License](../LICENSE).

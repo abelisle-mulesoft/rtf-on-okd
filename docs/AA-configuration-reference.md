@@ -104,3 +104,7 @@ The procedures in this repository were validated using the following software ve
 
 > [!IMPORTANT]
 > These versions represent the validated software baseline for the procedures in this repository. Newer or older versions of OKD, CentOS Stream CoreOS, Runtime Fabric, Kubernetes, or the supporting tools may require changes to the documented procedures and should be validated before use.
+
+---
+
+Copyright © 2026 Alan Belisle. Licensed under the [MIT License](../LICENSE).
