@@ -64,9 +64,16 @@ The current release documents the provisioning of an OKD Single Node (SNO) clust
 - Add Runtime Fabric outbound connectivity testing and related management guidance.
 - Incorporate installation procedure improvements identified while validating the local registry configuration.
 
+### Release 3 (`v1.2.0`)
+
+- Add a validated procedure for upgrading Runtime Fabric on OKD.
+- Add support for upgrading Runtime Fabric when using a local image registry.
+- Add pre-upgrade backup, health verification, upgrade monitoring, and post-upgrade validation procedures.
+- Add Kubernetes version compatibility checks for Runtime Fabric installation and upgrades.
+
 ### Future Enhancements
 
-Additional procedures and deployment scenarios will be documented as they are implemented and validated. Planned enhancements include Runtime Fabric lifecycle management and deployment on additional platforms, including Azure and AWS.
+Additional procedures and deployment scenarios will be documented as they are implemented and validated. Planned enhancements include additional Runtime Fabric lifecycle management procedures and deployment on additional platforms, including Azure and AWS.
 
 ## About This Repository
 
