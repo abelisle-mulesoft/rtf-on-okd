@@ -283,7 +283,7 @@ Confirm that the latest tag is present and that `/data/registry` contains regist
 
 ### 3.1 Runtime Fabric Images
 
-Automatically synchronize the Runtime Fabric 3.0.277 images required for OpenShift from the MuleSoft-hosted registry to the local registry.
+Synchronize the Runtime Fabric 3.0.277 images required for OpenShift from the MuleSoft-hosted registry to the local registry.
 
 ##### Procedure
 
@@ -492,6 +492,18 @@ done
 
 Confirm that the verification returns OK for all images.
 
+Sign out of the MuleSoft Runtime Fabric registry.
+
+```bash
+podman logout rtf-runtime-registry.kprod.msap.io
+```
+
+Clear the authorization token.
+
+```bash
+unset ANYPOINT_TOKEN
+```
+
 ## 4. Configure OKD to Trust the Local Registry
 
 Configure OKD to trust the self-signed certificate used by the local container registry.
@@ -504,7 +516,7 @@ Add the local registry certificate to the OKD cluster and configure the cluster-
 
 Create a ConfigMap containing the local registry certificate in the `openshift-config` namespace.
 
-``` bash
+```bash
 oc create configmap registry-ca \
     --namespace openshift-config \
     --from-file=orion.lan..5000=/opt/rtf-registry/certs/registry.crt
@@ -512,7 +524,7 @@ oc create configmap registry-ca \
 
 Configure the cluster-wide image configuration to use the ConfigMap as an additional trusted certificate authority.
 
-``` bash
+```bash
 oc patch image.config.openshift.io/cluster \
     --type=merge \
     --patch '{"spec":{"additionalTrustedCA":{"name":"registry-ca"}}}'
@@ -522,7 +534,7 @@ oc patch image.config.openshift.io/cluster \
 
 Verify that the cluster-wide image configuration references the `registry-ca` ConfigMap.
 
-``` bash
+```bash
 oc get image.config.openshift.io/cluster \
     -o jsonpath='{.spec.additionalTrustedCA.name}{"\n"}'
 ```
@@ -531,7 +543,7 @@ Confirm that the command returns `registry-ca`.
 
 Verify that the MachineConfigPool has completed applying the configuration and that the OKD node is ready.
 
-``` bash
+```bash
 oc get machineconfigpools
 oc get nodes
 ```
@@ -546,13 +558,13 @@ Verify that OKD can authenticate to the local registry, trust its TLS certificat
 
 Create a temporary namespace for validating access to the local registry.
 
-``` bash
+```bash
 oc create namespace registry-test
 ```
 
 Create a temporary pull secret containing the local registry credentials.
 
-``` bash
+```bash
 oc create secret docker-registry registry-test-pull-secret \
     --namespace registry-test \
     --docker-server=orion.lan:5000 \
@@ -562,7 +574,7 @@ oc create secret docker-registry registry-test-pull-secret \
 
 Create a validation pod that retrieves the Alpine image previously stored in the local registry.
 
-``` bash
+```bash
 oc run registry-test \
     --namespace registry-test \
     --image=orion.lan:5000/validation/alpine:latest \
@@ -600,7 +612,7 @@ oc run registry-test \
 
 Verify that the validation pod is running.
 
-``` bash
+```bash
 oc get pod registry-test \
     --namespace registry-test
 ```
@@ -609,7 +621,7 @@ Confirm that the pod reports `Running`.
 
 Verify that the image used by the pod was retrieved from the local registry.
 
-``` bash
+```bash
 oc get pod registry-test \
     --namespace registry-test \
     -o jsonpath='{.status.containerStatuses[0].imageID}{"\n"}'
@@ -619,7 +631,7 @@ Confirm that the image ID begins with `orion.lan:5000/validation/alpine@sha256:`
 
 Delete the temporary validation resources.
 
-``` bash
+```bash
 oc delete namespace registry-test
 ```
 

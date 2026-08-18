@@ -17,6 +17,7 @@ Install Anypoint Runtime Fabric (RTF) on the prepared OKD Single Node OpenShift 
 
 Before proceeding, ensure the following requirements have been met:
 
+- The Kubernetes version used by the OKD Single Node OpenShift cluster is listed as supported for the Runtime Fabric version being installed in the applicable Runtime Fabric release notes.
 - The OKD Single Node OpenShift cluster has been installed as described in **Installing OKD**.
 - The OKD virtual machine meets the validated sizing described in `AA-configuration-reference.md`.
 - The cluster has outbound connectivity to the hostnames and ports listed in MuleSoft’s [Runtime Fabric network configuration requirements](https://docs.mulesoft.com/runtime-fabric/latest/install-self-managed-network-configuration).
@@ -25,6 +26,9 @@ Before proceeding, ensure the following requirements have been met:
 - You have `cluster-admin` privileges in OKD.
 - The clean OKD virtual machine disk has been backed up.
 - You have Red Hat credentials that can authenticate to `registry.connect.redhat.com` and retrieve the certified Runtime Fabric Operator bundle.
+
+> [!NOTE]
+> Runtime Fabric release notes identify the Kubernetes versions supported by each Runtime Fabric release. Because OKD is not a MuleSoft-supported Runtime Fabric platform, the validated lab environment may use a Kubernetes version outside that supported range.
 
 ## 3. Start and Verify the OKD Cluster
 
