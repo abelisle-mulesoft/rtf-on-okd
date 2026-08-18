@@ -159,6 +159,9 @@ oc create ns rtf
 
 Create the registry credentials required to pull the Runtime Fabric platform images and the certified Runtime Fabric Operator bundle.
 
+> [!IMPORTANT]
+> Commands in this section contain registry credentials. Be aware that commands containing credentials may be retained in shell history. Do not store them in screenshots, shell scripts, documentation, or source-control repositories.
+
 ##### Procedure
 
 ###### Create the Runtime Fabric Registry Pull Secret
@@ -320,7 +323,7 @@ base64 < license.lic | tr -d '\n'
 Copy the displayed value. It will be used when creating the Runtime Fabric instance.
 
 > [!IMPORTANT]
-> The Runtime Fabric activation data, Mule license, and registry credentials are sensitive. Do not store them in screenshots, shell scripts, or source-control repositories.
+> The Runtime Fabric activation data, Mule license, and registry credentials are sensitive. Do not store them in screenshots, shell scripts, documentation, or source-control repositories.
 
 ### 5.5 Create the Runtime Fabric Instance
 

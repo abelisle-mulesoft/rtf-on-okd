@@ -14,8 +14,6 @@ This guide describes how to deploy a local container registry on the RHEL host, 
 > [!NOTE]
 > A local container registry is not required for the standard Runtime Fabric installation described in `03-install-rtf.md`. This configuration is intended for environments where direct access to the Runtime Fabric image registries is restricted or unavailable.
 
-# Configure a Local Registry for Anypoint Runtime Fabric
-
 ## 2. Prepare the Local Registry
 
 Prepare a local container registry on the RHEL host to store the Runtime Fabric images mirrored from the MuleSoft-hosted registries.
@@ -280,9 +278,12 @@ Confirm that the latest tag is present and that `/data/registry` contains regist
 
 ## 3. Synchronize the Required Images
 
+> [!IMPORTANT]
+> Commands in this section use credentials and authorization tokens. Be aware that commands containing sensitive values may be retained in shell history. Do not store them or their output in screenshots, shell scripts, documentation, or source-control repositories.
+
 ### 3.1 Runtime Fabric Images
 
-Automatically synchronize the Runtime Fabric 3.0.102 images required for OpenShift from the MuleSoft-hosted registry to the local registry.
+Automatically synchronize the Runtime Fabric 3.0.277 images required for OpenShift from the MuleSoft-hosted registry to the local registry.
 
 ##### Procedure
 
@@ -306,12 +307,12 @@ test -n "$ANYPOINT_TOKEN" \
   && echo "Authorization token obtained successfully."
 ```
 
-Retrieve the OpenShift images required by Runtime Fabric 3.0.102.
+Retrieve the OpenShift images required by Runtime Fabric 3.0.277.
 
 ```bash
 RTF_IMAGE_LIST=$(
   curl -sS \
-    "https://anypoint.mulesoft.com/runtimefabric/api/agentmanifests/3.0.102" \
+    "https://anypoint.mulesoft.com/runtimefabric/api/agentmanifests/3.0.277" \
     -H "Authorization: bearer ${ANYPOINT_TOKEN}" \
   | jq -r '.dependencies[]
       | select(.provider == "openshift")
@@ -328,17 +329,16 @@ printf '%s\n' "$RTF_IMAGE_LIST"
 Example output:
 
 ```text
-rtf-core-actions-ubi:1.0.200
-dias-anypoint-monitoring-sidecar-ubi:2.0.45
-rtf-cluster-ops-ubi:2.0.299
-rtf-daemon-ubi:2.0.284
-rtf-mule-clusterip-service-ubi:1.4.52
-rtf-app-init-ubi:1.0.245
-rtf-object-store-ubi:1.0.264
-rtf-ubi-base-nginx:0.3.48
-rtf-resource-fetcher-ubi:1.0.259
+rtf-core-actions-ubi:1.0.219
+dias-anypoint-monitoring-sidecar-ubi:2.2.36
 rtf-cluster-ops-ubi:2.0.384
-rtf-agent-ubi:3.0.102
+rtf-daemon-ubi:2.0.400
+rtf-mule-clusterip-service-ubi:1.4.92
+rtf-app-init-ubi:1.0.274
+rtf-object-store-ubi:1.0.312
+rtf-ubi-base-nginx:0.3.57
+rtf-resource-fetcher-ubi:1.0.333
+rtf-agent-ubi:3.0.277
 ```
 
 Sign in to the MuleSoft Runtime Fabric registry.
@@ -640,6 +640,9 @@ oc create ns rtf
 
 Create the registry credentials required to pull the Runtime Fabric platform images and the certified Runtime Fabric Operator bundle.
 
+> [!IMPORTANT]
+> Commands in this section contain registry credentials. Be aware that commands containing credentials may be retained in shell history. Do not store them in screenshots, shell scripts, documentation, or source-control repositories.
+
 ##### Procedure
 
 <!-- LOCAL REGISTRY CHANGE - BEGIN -->
@@ -805,7 +808,7 @@ base64 < license.lic | tr -d '\n'
 Copy the displayed value. It will be used when creating the Runtime Fabric instance.
 
 > [!IMPORTANT]
-> The Runtime Fabric activation data, Mule license, and registry credentials are sensitive. Do not store them in screenshots, shell scripts, or source-control repositories.
+> The Runtime Fabric activation data, Mule license, and registry credentials are sensitive. Do not store them in screenshots, shell scripts, documentation, or source-control repositories.
 
 ### 5.5 Create the Runtime Fabric Instance
 
