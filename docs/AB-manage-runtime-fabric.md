@@ -259,7 +259,9 @@ Ensure the following requirements are met before upgrading Runtime Fabric.
 
 ### Synchronize the Target Runtime Fabric Images
 
-Synchronize the images required for the target Runtime Fabric version from the MuleSoft-hosted registry to the local registry.
+If Runtime Fabric retrieves images directly from the MuleSoft-hosted registry, skip this section and continue with **Verify the Current Runtime Fabric Installation**.
+
+If Runtime Fabric is configured to use a local registry, synchronize the images required for the target Runtime Fabric version from the MuleSoft-hosted registry to the local registry.
 
 > [!IMPORTANT]
 > Commands in this section use credentials and authorization tokens. Be aware that commands containing sensitive values may be retained in shell history. Do not store them or their output in screenshots, shell scripts, documentation, or source-control repositories.
