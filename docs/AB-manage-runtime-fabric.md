@@ -746,11 +746,177 @@ Confirm that:
 
 The Runtime Fabric upgrade is complete when all validation steps complete successfully.
 
+## Manage Mule Runtime Versions
 
+Manage the different versions of the Mule runtime and the corresponding Anypoint Monitoring sidecar images used by applications deployed to Runtime Fabric when a local container registry is used.
 
-<!-- ## Update the Mule License -->
-<!-- ### Install Helm -->
-<!-- ### Update the Mule License -->
+> [!IMPORTANT]
+> Updating the Mule runtime versions available for deploying applications to Runtime Fabric is separate from upgrading Runtime Fabric. When Runtime Fabric is upgraded, the platform components are updated, but the available Mule runtime versions remain unchanged.
+
+### Understand Mule Runtime Release Channels
+
+MuleSoft provides Mule runtime releases through two release channels: **Edge** and **Long-Term Support (LTS)**. Both release channels are available for applications deployed to Runtime Fabric.
+
+Edge releases provide access to new Mule runtime features on a more frequent release cadence and have a shorter support period. MuleSoft releases Edge versions up to three times per year.
+
+LTS releases provide a longer support period and incorporate capabilities introduced through previous Edge releases. MuleSoft schedules LTS releases periodically in February.
+
+When an LTS release occurs, the Edge and LTS releases can share the same Mule runtime minor version. The release channel is identified by the runtime build tag. For example:
+
+```text
+4.9.0:1e    Edge
+4.9.0:1     LTS
+```
+
+The `e` suffix identifies an Edge build. An LTS build does not include the `e` suffix.
+
+Mule runtime minor versions do not necessarily progress sequentially within the LTS channel. Edge releases can introduce intervening minor versions before the next LTS release. For example, Mule 4.6 LTS was followed by Mule 4.9 LTS, while Mule 4.7 and Mule 4.8 were Edge releases.
+
+Organizations can choose Edge, LTS, or a combination of both release channels according to their own lifecycle, feature adoption, and support requirements.
+
+For the current release cadence, support periods, and available Mule runtime versions, refer to MuleSoft’s [Edge and LTS Releases for Mule](https://docs.mulesoft.com/release-notes/mule-runtime/lts-edge-release-cadence) documentation.
+
+### Identify Available Mule Runtime Versions
+
+Organizations can synchronize any combination of supported Edge and LTS Mule runtime versions according to their own lifecycle and application requirements. They can also retain multiple Mule runtime versions in the local registry simultaneously. For the purpose of this guide, the validated environment maintains the current LTS release and the two most recent Edge releases. At the time this procedure was validated, this resulted in the following Mule runtime selections:
+
+| Release channel | Mule runtime | Note                  |
+| --------------- | ------------ | --------------------- |
+| LTS             | 4.9          | Current LTS release   |
+| Edge            | 4.11         | Previous Edge release |
+| Edge            | 4.12         | Current Edge release  |
+
+> [!NOTE]
+> The Mule runtime versions shown above represent the versions selected to validate this guide. They are not recommendations for which Mule runtime versions an organization should maintain. Review the current MuleSoft release notes and select the versions appropriate for your environment.
+
+As discussed in section **3.2 Mule Runtime Images** of `AC-configure-local-rtf-registry.md`, MuleSoft publishes the Mule runtime versions available for Runtime Fabric in the [Mule Runtime Patch Update Release Notes for Mule Apps on Runtime Fabric](https://docs.mulesoft.com/release-notes/runtime-fabric/runtime-fabric-runtimes-release-notes). The release notes identify the available Mule runtime versions, release channels, image builds, and supported Java versions. Runtime packages use the following format:
+
+```text
+<mule-version>:<image-build>-<java-version>
+```
+
+For example:
+
+```text
+4.12.2:8e-java17
+```
+
+As stated previously, the `e` suffix in the image build identifies an Edge release. LTS releases do not include the `e` suffix.
+
+At the time this procedure was validated, the selected Mule runtime versions resulted in the following Mule runtime and Anypoint Monitoring sidecar images to synchronize. Only the latest patch and image build from each selected release line is synchronized.
+
+| Mule runtime image                | Sidecar image |
+| --------------------------------- | ------------- |
+| poseidon-runtime-4.9.20:9-java17  | dias-anypoint-monitoring-sidecar-ubi:2.2.41 |
+| poseidon-runtime-4.11.6:7e-java17 | dias-anypoint-monitoring-sidecar-ubi:2.2.33 |
+| poseidon-runtime-4.12.2:8e-java17 | dias-anypoint-monitoring-sidecar-ubi:2.2.41 |
+
+### Synchronize Mule Runtime Images
+
+Synchronize the Mule runtime and OpenShift-compatible Anypoint Monitoring sidecar images required to deploy Mule applications to Runtime Fabric.
+
+Synchronization is additive. Adding a Mule runtime version to the local registry does not replace or remove previously synchronized Mule runtime or Anypoint Monitoring sidecar images.
+
+> [!IMPORTANT]
+> Do not delete older Mule runtime or Anypoint Monitoring sidecar images from the local registry solely because newer versions have been synchronized; existing applications may depend on those images. Remove an image from the local registry only after you have confirmed that no deployed application still needs it.
+
+##### Procedure
+
+Sign in to the local registry.
+
+```bash
+podman login \
+    orion.lan:5000 \
+    --username rtf-registry
+```
+
+When prompted, enter the local registry password.
+
+Sign in to the MuleSoft Runtime Fabric registry.
+
+```bash
+podman login \
+    rtf-runtime-registry.kprod.msap.io \
+    --username '<docker-username>'
+```
+
+When prompted, enter the MuleSoft Runtime Fabric registry password — that is, the `docker-password` provided on the Runtime Fabric details page in Anypoint Runtime Manager when the Runtime Fabric was created.
+
+Define the list of images to synchronize.
+
+```bash
+MULE_IMAGE_LIST='poseidon-runtime-4.9.20:9-java17
+poseidon-runtime-4.11.6:7e-java17
+poseidon-runtime-4.12.2:8e-java17
+dias-anypoint-monitoring-sidecar-ubi:2.2.33
+dias-anypoint-monitoring-sidecar-ubi:2.2.41'
+```
+
+Review the list before continuing.
+
+```bash
+printf '%s\n' "$MULE_IMAGE_LIST"
+```
+
+Synchronize the images.
+
+```bash
+for IMAGE in $MULE_IMAGE_LIST
+do
+    echo "Processing $IMAGE"
+    podman pull rtf-runtime-registry.kprod.msap.io/mulesoft/$IMAGE
+    podman tag \
+        rtf-runtime-registry.kprod.msap.io/mulesoft/$IMAGE \
+        orion.lan:5000/mulesoft/$IMAGE
+    podman push orion.lan:5000/mulesoft/$IMAGE
+done
+```
+
+##### Verification
+
+Verify that the Mule runtime and OpenShift-compatible Anypoint Monitoring sidecar images are available in the local registry.
+
+```bash
+for IMAGE in $MULE_IMAGE_LIST
+do
+    REPOSITORY="${IMAGE%:*}"
+    TAG="${IMAGE##*:}"
+
+    printf 'Verifying %s ... ' "$IMAGE"
+
+    if RESPONSE=$(curl -fsS \
+        -u "rtf-registry:<registry-password>" \
+        "https://orion.lan:5000/v2/mulesoft/${REPOSITORY}/tags/list")
+    then
+        if jq -e \
+            --arg TAG "$TAG" \
+            '.tags | index($TAG) != null' \
+            <<< "$RESPONSE" \
+            > /dev/null
+        then
+            echo "OK"
+        else
+            echo "FAILED"
+        fi
+    else
+        echo "FAILED"
+    fi
+done
+```
+
+Confirm that the verification returns OK for all images.
+
+Sign out of the local registry.
+
+```bash
+podman logout orion.lan:5000
+```
+
+Sign out of the MuleSoft Runtime Fabric registry.
+
+```bash
+podman logout rtf-runtime-registry.kprod.msap.io
+```
 
 ---
 
