@@ -71,9 +71,14 @@ The current release documents the provisioning of an OKD Single Node (SNO) clust
 - Add pre-upgrade backup, health verification, upgrade monitoring, and post-upgrade validation procedures.
 - Add Kubernetes version compatibility checks for Runtime Fabric installation and upgrades.
 
+### Release 4 (`v1.3.0`)
+
+* Add guidance for understanding Mule runtime Edge and LTS release channels.
+* Add procedures for identifying and synchronizing selected Mule runtime and Anypoint Monitoring sidecar images when using a local image registry.
+
 ### Future Enhancements
 
-Additional procedures and deployment scenarios will be documented as they are implemented and validated. Planned enhancements include additional Runtime Fabric lifecycle management procedures and deployment on additional platforms, including Azure and AWS.
+Additional procedures and deployment scenarios will be documented as they are implemented and validated. Planned enhancements include additional Runtime Fabric management and lifecycle procedures and deployment on additional platforms, including Azure and AWS.
 
 ## About This Repository
 
